@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JoMyst - Plant a Flower</title>
+  <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Hibiscus_flower.jpg/600px-Hibiscus_flower.jpg">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <style>
+    body {
+      scroll-behavior: smooth;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+    }
+    .fade-in {
+      animation: fadeIn 1.5s ease-in;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-green-50 text-gray-800 font-sans">
+  <header class="bg-green-100 p-4 flex justify-between items-center shadow sticky top-0 z-50">
+    <div class="flex items-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Hibiscus_flower.jpg/100px-Hibiscus_flower.jpg" alt="JoMyst Logo" class="w-10 h-10 rounded-full mr-2">
+      <h1 class="text-3xl font-bold text-green-700">JoMyst</h1>
+    </div>
+    <nav class="hidden md:flex space-x-4">
+      <a href="#about" class="hover:text-green-600">About</a>
+      <a href="#donate" class="hover:text-green-600">Donate</a>
+      <a href="#impact" class="hover:text-green-600">Impact</a>
+      <a href="#gallery" class="hover:text-green-600">Gallery</a>
+      <a href="#contact" class="hover:text-green-600">Contact</a>
+    </nav>
+  </header>
+
+  <section class="text-center py-24 bg-gradient-to-br from-green-100 to-white fade-in">
+    <h2 class="text-5xl font-extrabold text-green-700 mb-4">Plant a Flower, Spread the Power</h2>
+    <p class="mb-6 text-lg text-gray-600">Support our mission by donating JoMyst tokens to plant hibiscus flowers 🌸</p>
+    <button id="connectBtn" class="bg-green-500 hover:bg-green-600 transition text-white px-8 py-3 rounded-lg shadow">Connect Wallet</button>
+  </section>
+
+  <section id="about" class="py-16 px-6 bg-white text-center fade-in">
+    <h3 class="text-3xl font-semibold mb-4 text-green-700">About JoMyst</h3>
+    <p class="max-w-2xl mx-auto text-gray-700">JoMyst is a meme token with a purpose — encouraging people to donate and plant hibiscus flowers to beautify our environment and support eco-conscious actions.</p>
+  </section>
+
+  <section id="donate" class="py-16 px-6 bg-green-50 text-center fade-in">
+    <h3 class="text-3xl font-semibold mb-4 text-green-700">How to Donate</h3>
+    <p class="mb-4 text-gray-700">Send JoMyst tokens to the wallet address below:</p>
+    <div class="bg-white p-4 rounded-lg mb-4 inline-block shadow-lg">
+      <p class="font-mono text-lg text-green-700" id="walletAddress">0x1234567890abcdef1234567890abcdef12345678</p>
+    </div>
+    <p class="mb-4 text-gray-600">Every 100 JoMyst = 1 Hibiscus planted 🌺</p>
+    <p class="text-gray-500">Make sure to connect your wallet before donating!</p>
+  </section>
+
+  <section id="impact" class="py-16 px-6 bg-white text-center fade-in">
+    <h3 class="text-3xl font-semibold mb-6 text-green-700">Our Impact So Far</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+      <div class="p-4 rounded-lg glass">
+        <p class="text-4xl font-bold text-green-700" id="flowersPlanted">🌺 0</p>
+        <p>Flowers Planted</p>
+      </div>
+      <div class="p-4 rounded-lg glass">
+        <p class="text-4xl font-bold text-green-700" id="donors">👥 0</p>
+        <p>Donors</p>
+      </div>
+      <div class="p-4 rounded-lg glass">
+        <p class="text-4xl font-bold text-green-700" id="tokensDonated">💰 0</p>
+        <p>JoMyst Donated</p>
+      </div>
+      <div class="p-4 rounded-lg glass">
+        <p class="text-4xl font-bold text-green-700" id="plantSites">🌍 0</p>
+        <p>Plantation Sites</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="py-16 px-6 bg-green-50 text-center fade-in">
+    <h3 class="text-3xl font-semibold mb-6 text-green-700">Donation Gallery</h3>
+    <ul id="donationGallery" class="space-y-3 max-w-lg mx-auto">
+      <!-- Donation logs will be added here -->
+    </ul>
+  </section>
+
+  <section id="contact" class="py-16 px-6 bg-white fade-in">
+    <h3 class="text-3xl font-semibold mb-4 text-center text-green-700">Get in Touch or Volunteer</h3>
+    <form class="space-y-4 max-w-md mx-auto bg-green-50 p-6 rounded-lg shadow">
+      <input type="text" placeholder="Your Name" class="w-full p-3 border rounded">
+      <input type="email" placeholder="Your Email" class="w-full p-3 border rounded">
+      <textarea placeholder="How would you like to help?" class="w-full p-3 border rounded"></textarea>
+      <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Submit</button>
+    </form>
+  </section>
+
+  <footer class="bg-green-100 text-center p-6 mt-10 text-green-800">
+    <p>© 2025 JoMyst. Made with 🌺 for a greener world.</p>
+  </footer>
+
+  <script>
+    let web3;
+    const connectBtn = document.getElementById('connectBtn');
+    connectBtn.onclick = async () => {
+      if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          connectBtn.innerText = 'Wallet Connected';
+          connectBtn.disabled = true;
+          updateStats();
+        } catch (error) {
+          alert('Wallet connection failed.');
+        }
+      } else {
+        alert('Please install MetaMask!');
+      }
+    };
+
+    function updateStats() {
+      const donated = Math.floor(Math.random() * 50000);
+      const donors = Math.floor(Math.random() * 150);
+      const flowers = Math.floor(donated / 100);
+      const sites = Math.floor(donors / 10) + 1;
+
+      document.getElementById('tokensDonated').textContent = `💰 ${donated}`;
+      document.getElementById('donors').textContent = `👥 ${donors}`;
+      document.getElementById('flowersPlanted').textContent = `🌺 ${flowers}`;
+      document.getElementById('plantSites').textContent = `🌍 ${sites}`;
+
+      const gallery = document.getElementById('donationGallery');
+      gallery.innerHTML = '';
+      for (let i = 0; i < 5; i++) {
+        const amount = Math.floor(Math.random() * 2000) + 100;
+        const entry = document.createElement('li');
+        entry.className = "p-3 bg-white rounded shadow text-left";
+        entry.textContent = `🌸 Donor ${i + 1} donated ${amount} JoMyst – ${Math.floor(amount / 100)} Flowers Planted`;
+        gallery.appendChild(entry);
+      }
+    }
+  </script>
+</body>
+</html>
