@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>JoMyst (HIB) Meme Coin</title>
+<meta name="description" content="JoMyst (HIB) - Meme Coin on Solana. Donate, connect wallet, track price, join the community!" />
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0f1f16;
+    --card:#1f3e2c;
+    --text:#e6f5e1;
+    --muted:#8fae9c;
+    --accent:#2ddb7f;
+    --radius:16px;
+    --shadow:0 20px 40px -10px rgba(0,0,0,0.45);
+    --transition:0.35s cubic-bezier(.4,.2,.2,1);
+    --max-width:1200px;
+  }
+  [data-theme="light"] {
+    --bg:#f0f9f4;
+    --card:#ffffff;
+    --text:#1f3e2c;
+    --muted:#6d8573;
+    --accent:#00b56b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+    background:radial-gradient(circle at top left, rgba(15,31,22,1) 0%, rgba(6,17,12,1) 60%);
+    color: var(--text);
+    line-height:1.45;
+    transition: background var(--transition), color var(--transition);
+    min-height:100%;
+  }
+  .container{
+    width:100%;
+    max-width: var(--max-width);
+    margin:0 auto;
+    padding:1rem 1rem 3rem;
+  }
+  header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    backdrop-filter:blur(12px);
+    background:rgba(15,31,22,0.85);
+    padding:0.75rem 1rem;
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    flex-wrap:wrap;
+    border-radius:0 0 16px 16px;
+    margin-bottom:1rem;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+    cursor: pointer;
+    text-decoration:none;
+    color: var(--text);
+    font-weight:700;
+    font-size:1.25rem;
+  }
+  .logo svg{width:32px;height:32px;filter:drop-shadow(0 10px 15px rgba(45,219,127,0.7));}
+  nav{
+    margin-left:auto;
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .nav-link{
+    position:relative;
+    padding:0.5rem 0.75rem;
+    text-decoration:none;
+    font-weight:500;
+    border-radius:999px;
+    cursor:pointer;
+    background:rgba(255,255,255,0.05);
+    color: var(--text);
+    transition: var(--transition);
+    font-size:0.9rem;
+  }
+  .nav-link.active, .nav-link:hover{
+    background: var(--accent);
+    color:#fff;
+    box-shadow:0 15px 30px -5px rgba(45,219,127,0.6);
+  }
+  .theme-toggle{
+    margin-left:0.5rem;
+    background:rgba(255,255,255,0.08);
+    border:none;
+    padding:0.5rem;
+    border-radius:50%;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    width:40px;
+    height:40px;
+    color: var(--text);
+    transition: var(--transition);
+  }
+  .section{
+    padding:3rem 1rem;
+    border-radius:16px;
+    margin-bottom:1.5rem;
+    position:relative;
+    overflow:hidden;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+  }
+  .section h2{
+    margin-top:0;
+    font-size:2rem;
+    position:relative;
+    display:inline-block;
+  }
+  .badge{
+    display:inline-block;
+    background: var(--accent);
+    padding:4px 10px;
+    border-radius:999px;
+    font-size:0.55rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-right:6px;
+    color:#fff;
+    font-weight:700;
+  }
+  .grid{
+    display:grid;
+    gap:1.5rem;
+  }
+  .cards{display:flex;gap:1rem;flex-wrap:wrap;}
+  .card{
+    background:rgba(255,255,255,0.03);
+    border-radius:14px;
+    flex:1 1 260px;
+    padding:1rem 1rem 1.25rem;
+    position:relative;
+    overflow:hidden;
+    transition: var(--transition);
+    cursor:default;
+  }
+  .card small{
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-weight:600;
+    display:block;
+    margin-bottom:6px;
+    color: var(--muted);
+  }
+  .price-ticker{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    flex-wrap:wrap;
+  }
+  .ticker-item{
+    padding:10px 16px;
+    background:rgba(0,0,0,0.2);
+    border-radius:999px;
+    font-size:0.9rem;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    position:relative;
+    overflow:hidden;
+  }
+  .btn{
+    padding:0.75rem 1.2rem;
+    border:none;
+    cursor:pointer;
+    border-radius:999px;
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background: var(--accent);
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    transition: var(--transition);
+  }
+  .btn:hover{
+    filter:brightness(1.05);
+  }
+  .donation-box{
+    display:flex;
+    flex-wrap:wrap;
+    gap:1.5rem;
+    align-items:flex-start;
+  }
+  .donate-card{
+    flex:1 1 320px;
+    background:rgba(255,255,255,0.03);
+    border-radius:14px;
+    padding:1rem 1rem 1.25rem;
+    position:relative;
+  }
+  .wallet{
+    background:rgba(0,0,0,0.1);
+    border-radius:8px;
+    padding:10px 12px;
+    font-family: monospace;
+    word-break:break-all;
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .copy-btn{
+    background:rgba(255,255,255,0.1);
+    border:none;
+    padding:6px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:0.75rem;
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+  }
+  .qr{
+    width:120px;
+    height:120px;
+    background:linear-gradient(135deg, rgba(45,219,127,.2), rgba(0,0,0,.15));
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.55rem;
+    text-align:center;
+    position:relative;
+    color: var(--text);
+  }
+  .donation-info{
+    flex:2 1 320px;
+    display:flex;
+    flex-direction:column;
+    gap:0.75rem;
+  }
+  .tabs{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:1rem;
+  }
+  .tab{
+    padding:10px 16px;
+    background:rgba(255,255,255,0.04);
+    border-radius:999px;
+    cursor:pointer;
+    font-weight:500;
+    transition: var(--transition);
+  }
+  .tab.active{
+    background: var(--accent);
+    color:#fff;
+    box-shadow:0 20px 40px -10px rgba(45,219,127,0.6);
+  }
+  .faq{
+    max-width:900px;
+    margin:0 auto;
+  }
+  .accordion{
+    border-radius:12px;
+    background:rgba(255,255,255,0.03);
+    margin-bottom:12px;
+    overflow:hidden;
+  }
+  .accordion-header{
+    padding:14px 18px;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-weight:600;
+  }
+  .accordion-body{
+    max-height:0;
+    overflow:hidden;
+    padding:0 18px;
+    transition: max-height 0.35s ease;
+    background:rgba(0,0,0,0.05);
+  }
+  .accordion-body p{
+    margin:12px 0;
+  }
+  .wallet-stub{
+    background:rgba(255,255,255,0.04);
+    padding:16px;
+    border-radius:12px;
+    display:inline-block;
+    margin-top:8px;
+    font-size:0.9rem;
+  }
+  .feature-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1rem;
+  }
+  .interactive{
+    position:relative;
+    overflow:hidden;
+  }
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:all 0.6s cubic-bezier(.4,.2,.2,1);
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .footer{
+    padding:2rem 1rem;
+    text-align:center;
+    font-size:0.9rem;
+    margin-top:2rem;
+    border-radius:12px;
+    background:rgba(255,255,255,0.02);
+  }
+  .pill{
+    background: rgba(255,255,255,0.08);
+    padding:6px 12px;
+    border-radius:999px;
+    display:inline-block;
+    font-size:0.6rem;
+    margin-right:4px;
+  }
+  @media (max-width: 1024px){
+    .price-ticker{flex-direction:column;align-items:flex-start;}
+  }
+  @media (max-width: 800px){
+    header{flex-direction:column;align-items:flex-start;}
+    .nav-link{font-size:0.8rem;}
+    .section{padding:2rem 1rem;}
+  }
+</style>
+</head>
+<body>
+
+<header aria-label="site header">
+  <a class="logo" href="#home" aria-label="JoMyst logo">
+    <!-- simple greenish geometric logo -->
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" fill="url(#grad)"/>
+      <defs>
+        <radialGradient id="grad">
+          <stop offset="0%" stop-color="#2ddb7f"/>
+          <stop offset="80%" stop-color="#1f3e2c"/>
+        </radialGradient>
+      </defs>
+      <text x="50%" y="55%" text-anchor="middle" font-size="28" fill="#fff" font-family="Inter" font-weight="700">H</text>
+    </svg>
+    <div>
+      <div>JoMyst</div>
+      <div style="font-size:0.6rem; margin-top:2px;">HIB</div>
+    </div>
+  </a>
+  <nav aria-label="primary navigation">
+    <a class="nav-link" data-target="home" href="#home">Home</a>
+    <a class="nav-link" data-target="about" href="#about">About</a>
+    <a class="nav-link" data-target="donate" href="#donate">Donate</a>
+    <a class="nav-link" data-target="features" href="#features">Features</a>
+    <a class="nav-link" data-target="faq" href="#faq">FAQ</a>
+    <a class="nav-link" data-target="community" href="#community">Community</a>
+  </nav>
+  <button class="theme-toggle" aria-label="Toggle theme" title="Toggle theme" id="themeToggle">
+    🌗
+  </button>
+</header>
+
+<main class="container">
+  <!-- Hero / Home -->
+  <section class="section" id="home" data-section>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));align-items:center; gap:2rem;">
+      <div>
+        <div class="badge">Meme Coin</div>
+        <h1 style="margin-bottom:8px;">JoMyst <span style="color: var(--accent);">HIB</span></h1>
+        <p style="font-size:1.1rem; max-width:600px;">A playful yet potent meme coin living on Solana. Fuel the vibe, donate, and join the green wave. Fast, fun, and community-driven.</p>
+        <div style="margin:1rem 0; display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn" onclick="scrollToSection('donate')">Donate via Solana</button>
+          <button class="btn" style="background:rgba(255,255,255,0.1)" onclick="alert('Connect wallet placeholder')">Connect Wallet</button>
+        </div>
+        <div class="price-ticker" aria-label="Price ticker">
+          <div class="ticker-item" aria-label="HIB price">
+            <strong>HIB:</strong> $0.0034 ↑
+          </div>
+          <div class="ticker-item" aria-label="24h change">
+            <strong>24h:</strong> +12.8%
+          </div>
+          <div class="ticker-item" aria-label="Market cap">
+            <strong>Market Cap:</strong> $2.1M
+          </div>
+        </div>
+      </div>
+      <div style="position:relative; display:flex; justify-content:center;">
+        <!-- Stylized coin graphic -->
+        <div style="width:220px; height:220px; border-radius:50%; background:linear-gradient(135deg,var(--accent),rgba(45,219,127,0.4)); display:flex; align-items:center; justify-content:center; position:relative; box-shadow:0 40px 80px -10px rgba(45,219,127,0.6);">
+          <div style="font-size:72px; font-weight:700; color:#fff; text-shadow:0 10px 25px rgba(0,0,0,0.4);">H</div>
+          <div style="position:absolute; bottom:8px; right:8px; background:rgba(255,255,255,0.1); padding:6px 10px; border-radius:50%; font-size:12px;">HIB</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section" id="about" data-section>
+    <div class="badge">Why JoMyst?</div>
+    <h2>About the Coin</h2>
+    <p>JoMyst (HIB) is a community-first meme coin built on the speedy Solana network. Designed to be playful in spirit but polished in presentation, HIB is all about engagement, transparency, and giving back. Donations on Solana help fund ecosystem events, liquidity pools, and community rewards.</p>
+    <div class="feature-grid">
+      <div class="card reveal">
+        <small>Light-speed</small>
+        <h3>Solana Backbone</h3>
+        <p>Built on Solana for fast, low-fee transactions—so tipping, donating, and transacting is frictionless.</p>
+      </div>
+      <div class="card reveal">
+        <small>Community</small>
+        <h3>Decentralized Vibes</h3>
+        <p>User-driven evolution, viral campaigns, meme contests, and more. The community is the pulse.</p>
+      </div>
+      <div class="card reveal">
+        <small>Transparency</small>
+        <h3>Open Ledger</h3>
+        <p>All movements can be inspected via Solana explorers; no hidden mechanics, just vibes.</p>
+      </div>
+      <div class="card reveal">
+        <small>Fun First</small>
+        <h3>Meme Culture</h3>
+        <p>Memes are the fuel—shareable art, clever drops, and playful identity make HIB sticky.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Donate -->
+  <section class="section" id="donate" data-section>
+    <div class="badge">Support</div>
+    <h2>Donate with Solana</h2>
+    <p>Fuel JoMyst’s next meme wave. Donate SOL to the official wallet below. Your support powers community drops, liquidity, and green initiatives.</p>
+    <div class="donation-box">
+      <div class="donate-card">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="flex-shrink:0;">
+            <!-- Placeholder logo for donation -->
+            <div style="width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,#00FFA3,#00DD7F); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; font-size:24px;">S</div>
+          </div>
+          <div>
+            <div style="font-weight:700; font-size:1.1rem;">Solana Donation</div>
+            <div style="font-size:0.85rem; color: var(--muted);">Send SOL to support JoMyst</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <div class="wallet" aria-label="Solana wallet address">
+            <div id="walletAddress">So1aNaExAmplE1111111111111111111111111</div>
+            <button class="copy-btn" aria-label="Copy wallet" onclick="copyWallet()">Copy</button>
+          </div>
+          <div style="display:flex; gap:16px; flex-wrap:wrap; margin-top:12px;">
+            <div class="qr" aria-label="QR code placeholder">
+              QR Code<br><small style="display:block; margin-top:6px;">(Placeholder)</small>
+            </div>
+            <div class="donation-info">
+              <p><strong>Suggested Tiers:</strong></p>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <div class="pill">0.1 SOL - Supporter</div>
+                <div class="pill">1 SOL - Contributor</div>
+                <div class="pill">5 SOL - Mystic</div>
+                <div class="pill">10+ SOL - Legendary</div>
+              </div>
+              <p style="margin:0;">After donating, share your tx hash in community to get a badge!</p>
+              <div style="margin-top:6px;">
+                <button class="btn" onclick="alert('Trigger wallet send flow (integrate Solana SDK)')">Donate Now</button>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:18px; font-size:0.75rem; color: var(--muted);">
+            Tip: You can paste the address into any Solana-compatible wallet (Phantom, Glow, Solflare). Integration hooks for automatic detection can be added with Solana Web3.js.
+          </div>
+        </div>
+      </div>
+      <div class="donate-card">
+        <h3 style="margin-top:0;">Why donate?</h3>
+        <ul style="padding-left:1rem; margin:0 0 8px;">
+          <li>Keep memes alive with bounties.</li>
+          <li>Liquidity backing to reduce slippage.</li>
+          <li>Community airdrops and rewards.</li>
+          <li>Eco-themed meme campaigns (green wave!)</li>
+        </ul>
+        <div class="wallet-stub">
+          <div><strong>Wallet status:</strong> <em>Not connected</em></div>
+          <div style="margin-top:6px;">Integrate Phantom / Solana wallet here for one-click donations.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features / Tabs -->
+  <section class="section" id="features" data-section>
+    <div class="badge">Toolkit</div>
+    <h2>Advanced Features</h2>
+    <div class="tabs" role="tablist" aria-label="Feature tabs">
+      <div class="tab active" data-tab="realtime" role="tab">Real-time</div>
+      <div class="tab" data-tab="engage" role="tab">Engagement</div>
+      <div class="tab" data-tab="social" role="tab">Social</div>
+      <div class="tab" data-tab="security" role="tab">Security</div>
+    </div>
+    <div id="tabContent">
+      <div class="tab-panel" data-panel="realtime">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem;">
+          <div class="card reveal">
+            <small>Live Feed</small>
+            <h3>Price & Activity</h3>
+            <p>Mock real-time updates of HIB price, donations, and top contributors. Easy API hooks to feed live RPC data from Solana.</p>
+          </div>
+          <div class="card reveal">
+            <small>Countdown</small>
+            <h3>Next Drop</h3>
+            <p id="countdownText">Loading countdown...</p>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="engage" style="display:none;">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem;">
+          <div class="card reveal">
+            <small>Social</small>
+            <h3>Meme Challenges</h3>
+            <p>Users submit memes, vote, and winners get HIB airdrops. Embed Discord/Gallery feeds directly.</p>
+          </div>
+          <div class="card reveal">
+            <small>Referral</small>
+            <h3>Invite & Earn</h3>
+            <p>Share referral links to onboard new holders and earn small staking rewards (configurable).</p>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="social" style="display:none;">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem;">
+          <div class="card reveal">
+            <small>Community</small>
+            <h3>Discord + Twitter</h3>
+            <p>Live embed of the community chatter, pinned posts, and upcoming events. Connect to APIs for dynamic updates.</p>
+          </div>
+          <div class="card reveal">
+            <small>Leaderboard</small>
+            <h3>Top Donors</h3>
+            <p>Showcase biggest contributors. Gamify with badges and tiers.</p>
+          </div>
+        </div>
+      </div>
+      <div class="tab-panel" data-panel="security" style="display:none;">
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem;">
+          <div class="card reveal">
+            <small>Audit</small>
+            <h3>Transparency</h3>
+            <p>Placeholder for smart contract audit badges, verified contract hashes, and security disclaimers.</p>
+          </div>
+          <div class="card reveal">
+            <small>Anti-bot</small>
+            <h3>Rate Limiting</h3>
+            <p>Throttle interaction to reduce spam abuse on community actions (configurable).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq" data-section>
+    <div class="badge">Support</div>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq">
+      <div class="accordion">
+        <div class="accordion-header">
+          <div>What is JoMyst (HIB)?</div>
+          <div class="indicator">+</div>
+        </div>
+        <div class="accordion-body">
+          <p>JoMyst (HIB) is a meme coin on Solana focused on fun, community engagement, and green-themed campaigns. Think of it as a culture coin with purpose.</p>
+        </div>
+      </div>
+      <div class="accordion">
+        <div class="accordion-header">
+          <div>How do I donate?</div>
+          <div class="indicator">+</div>
+        </div>
+        <div class="accordion-body">
+          <p>Send SOL to the displayed wallet address in the Donate section. You can copy it or scan the QR (when integrated). After donating, share your transaction on community channels to get recognition.</p>
+        </div>
+      </div>
+      <div class="accordion">
+        <div class="accordion-header">
+          <div>Is my donation secure?</div>
+          <div class="indicator">+</div>
+        </div>
+        <div class="accordion-body">
+          <p>All transactions are on Solana’s public ledger. Always verify the address is correct (bookmark the site) and never share your private keys.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community -->
+  <section class="section" id="community" data-section>
+    <div class="badge">Join</div>
+    <h2>Community & Social</h2>
+    <p>Follow, share, and participate. Meme contests, live drops, and real-time leaderboards keep the energy high.</p>
+    <div class="cards">
+      <div class="card reveal">
+        <small>Discord</small>
+        <h3>Chat & Collab</h3>
+        <p>Join the official Discord to interact, submit memes, and coordinate events.</p>
+      </div>
+      <div class="card reveal">
+        <small>Twitter</small>
+        <h3>Spread the Word</h3>
+        <p>
+          Retweet campaigns, tag #JoMystHIB, and unlock surprise community bonuses.  
+          <a href="https://x.com/JoMyst_2025?t=YDaRQxqeVBHzFwAGWgwbNg&s=09" target="_blank" rel="noopener noreferrer" style="color: var(--accent); font-weight:600; text-decoration:none;">
+            Follow us on Twitter →
+          </a>
+        </p>
+      </div>
+      <div class="card reveal">
+        <small>Snapshot</small>
+        <h3>Governance</h3>
+        <p>Community votes on next meme themes, rewards, and feature prioritization.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <div>© 2025 JoMyst (HIB). All meme rights reserved. Built for community. Powered by Solana.</div>
+    <div style="margin-top:6px;">Prototype / placeholder. Wallet integrations and live data need backend SDK hooks (Solana Web3.js, RPC, etc.).</div>
+  </div>
+</main>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach(t => {
+    t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      const target = t.dataset.tab;
+      panels.forEach(p => {
+        if (p.dataset.panel === target) p.style.display='block';
+        else p.style.display='none';
+      });
+    });
+  });
+
+  // Hash navigation highlighting
+  const navLinks = document.querySelectorAll('.nav-link');
+  function setActiveByHash(){
+    const h = window.location.hash.slice(1) || 'home';
+    navLinks.forEach(l => {
+      if (l.dataset.target === h) l.classList.add('active');
+      else l.classList.remove('active');
+    });
+  }
+  window.addEventListener('hashchange', setActiveByHash);
+  setActiveByHash();
+
+  // Copy wallet
+  function copyWallet(){
+    const addr = document.getElementById('walletAddress').innerText.trim();
+    navigator.clipboard.writeText(addr).then(()=>{
+      alert('Wallet address copied');
+    });
+  }
+
+  // Countdown (example: next drop in future date)
+  function startCountdown(){
+    const drop = new Date();
+    drop.setDate(drop.getDate() + 5); // 5 days from now
+    const countdownEl = document.getElementById('countdownText');
+    function refresh(){
+      const now = new Date();
+      const diff = drop - now;
+      if (diff <= 0){
+        countdownEl.innerText = 'Live now!';
+        return;
+      }
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hrs = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+      const mins = Math.floor((diff%(1000*60*60))/(1000*60));
+      const secs = Math.floor((diff%(1000*60))/(1000));
+      countdownEl.innerText = `${days}d ${hrs}h ${mins}m ${secs}s`;
+    }
+    refresh();
+    setInterval(refresh, 1000);
+  }
+  startCountdown();
+
+  // Accordion
+  document.querySelectorAll('.accordion').forEach(acc => {
+    const header = acc.querySelector('.accordion-header');
+    const body = acc.querySelector('.accordion-body');
+    const indicator = acc.querySelector('.indicator');
+    header.addEventListener('click', () => {
+      const open = body.style.maxHeight && body.style.maxHeight !== '0px';
+      document.querySelectorAll('.accordion-body').forEach(b => {
+        b.style.maxHeight = null;
+        b.previousElementSibling.querySelector('.indicator').innerText = '+';
+      });
+      if (!open){
+        body.style.maxHeight = body.scrollHeight + 'px';
+        indicator.innerText = '-';
+      }
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if (e.isIntersecting){
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  },{threshold:0.15});
+  reveals.forEach(r=>observer.observe(r));
+
+  // Theme toggle
+  const themeToggle = document.getElementById('themeToggle');
+  function setTheme(t){
+    if (t==='light') document.documentElement.setAttribute('data-theme','light');
+    else document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('jm-theme', t);
+  }
+  themeToggle.addEventListener('click', ()=>{
+    const current = localStorage.getItem('jm-theme') === 'light' ? 'dark' : 'light';
+    setTheme(current);
+  });
+  // Initialize theme
+  const saved = localStorage.getItem('jm-theme') || 'dark';
+  setTheme(saved);
+
+  function scrollToSection(id){
+    location.hash = id;
+    document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  // Responsive active nav on scroll
+  const sections = document.querySelectorAll('[data-section]');
+  window.addEventListener('scroll', ()=>{
+    let current = 'home';
+    sections.forEach(s=>{
+      const rect = s.getBoundingClientRect();
+      if (rect.top <= window.innerHeight * 0.4) current = s.id;
+    });
+    navLinks.forEach(l => {
+      if (l.dataset.target === current) l.classList.add('active');
+      else l.classList.remove('active');
+    });
+  });
+
+</script>
+
+</body>
+</html>
